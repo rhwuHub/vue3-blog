@@ -7,7 +7,7 @@
           <div class="font-title-2">I'm Tan.</div>
           <div class="font-title-3">A Java Developer</div>
           <div class="main-top">
-            <div class="tit"><span>金屋藏小猪</span></div>
+            <div class="tit"><span>今非昔比</span></div>
           </div>
         </div>
       </div>
@@ -460,7 +460,7 @@ img {
     letter-spacing: 12px;
   }
   .tit::before {
-    content: '金屋藏小猪';
+    content: '今非昔比';
     text-shadow:
       -5px -5px 0px rgb(211, 250, 9),
       5px 5px 0px rgb(25, 10, 240);

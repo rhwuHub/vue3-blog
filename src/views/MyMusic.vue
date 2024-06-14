@@ -20,7 +20,7 @@
       <div class="other">
         <div class="userInfo">
           <img src="@/images/ion.jpg" alt="a" />
-          <span>金屋藏小猪</span>
+          <span>今非昔比</span>
         </div>
         <ul>
           <li><i class="iconfont icon-zhuti"></i></li>
