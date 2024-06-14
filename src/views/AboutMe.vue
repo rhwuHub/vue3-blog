@@ -272,7 +272,7 @@ export default {
     window.addEventListener('mousewheel', this.debounce(this.next, this.prev, 300))
 
     // 查询友链
-    axios.get(`http://localhost:9090/friend/getAll`).then((res) => {
+    axios.get(`http://139.9.220.169:9090/friend/getAll`).then((res) => {
       this.friends = res.data.data
     })
   },
@@ -374,7 +374,7 @@ export default {
   .tbt .myPhoto {
     flex: 3;
     width: 10%;
-    padding: 5px auto;
+    padding: 5px;
     text-align: center;
   }
   .tbt .myPhoto a {
@@ -573,7 +573,7 @@ export default {
   .tbt .myPhoto {
     flex: 3;
     width: 100%;
-    padding: 15px auto;
+    padding: 15px;
     text-align: center;
   }
   .tbt .myPhoto a {

@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # 构建项目
-RUN npm run build
+RUN npm run build-only
 
 # 使用 Nginx 镜像作为运行阶段
 FROM nginx:alpine

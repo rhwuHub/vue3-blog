@@ -30,8 +30,8 @@ export default {
     }
   },
   mounted() {
-    // .get('http://localhost:9090/music/get')
-    const res = axios.get('http://localhost:9090/music/get').then((res) => {
+    // .get('http://139.9.220.169:9090/music/get')
+    const res = axios.get('http://139.9.220.169:9090/music/get').then((res) => {
       // console.log(res.data.data)
       this.musicList = res.data.data
     })
