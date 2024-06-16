@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MyHome from '@/views/MyHome.vue'
+import { useMainStore } from '@/store/store';
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -75,19 +77,43 @@ const router = createRouter({
     {
       path: '/editor',
       name: 'BlogEditor',
-      component: () => import('@/views/MyEditor.vue')
+      component: () => import('@/views/MyEditor.vue'),
+      meta:{requiresAuth:true}
     },
     {
       path: '/manage',
       name: 'BlogManage',
-      component: () => import('@/views/BlogManage.vue')
+      component: () => import('@/views/BlogManage.vue'),
+      meta:{requiresAuth:true}
     },
     {
       path: '/essay',
       name: 'MyEssay',
       component: () => import('@/views/MyEssay.vue')
+    },
+    {
+      path: '/password',
+      name: 'PasswordPrompt',
+      component: () => import('@/components/PasswordPrompt.vue')
     }
   ]
+})
+
+
+router.beforeEach((to, from, next) => {
+  const mainStore = useMainStore()
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!mainStore.passwordVerified) {
+      next({
+        path: '/password',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router
