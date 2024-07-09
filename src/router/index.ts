@@ -95,6 +95,11 @@ const router = createRouter({
       path: '/password',
       name: 'PasswordPrompt',
       component: () => import('@/components/PasswordPrompt.vue')
+    },
+    {
+      path: '/toolbox',
+      name: 'Toolbox',
+      component: () => import('@/views/Toolbox.vue')
     }
   ]
 })

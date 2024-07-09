@@ -1,8 +1,5 @@
 <template>
   <div class="head-nav">
-    <!-- <div class="head-ion"> -->
-
-    <!-- </div> -->
     <ul id="nav">
       <li ref="slide1" class="slide1"></li>
       <li ref="slide2" class="slide2"></li>
@@ -35,7 +32,8 @@ export default {
         { path: '/photo', text: '照片集', left: 272 },
         { path: '/music/discover', text: '点歌台', left: 426 },
         { path: '/message', text: '留言板', left: 580 },
-        { path: '/aboutMe', text: '关于我', left: 734 }
+        { path: '/aboutMe', text: '关于我', left: 734 },
+        { path: '/toolbox', text: '工具箱', left: 880 }
       ],
       src: new URL('@/audio/贝加尔湖畔.mp3', import.meta.url).href,
       controls: false,
@@ -146,7 +144,7 @@ function transTime(time) {
 
   #nav {
     /* width: auto; */
-    width: 900px;
+    width: 1000px;
     margin: auto;
     z-index: 98;
     position: relative;
@@ -161,7 +159,7 @@ function transTime(time) {
 
   #nav li a {
     position: relative;
-    padding: 15px 50px;
+    padding: 15px 46px;
     font: 500 18px '优设标题黑';
     border: none;
     outline: none;
