@@ -104,7 +104,7 @@
                 </template>
                 <img
                   style="width: 200px"
-                  src="https://tbt-blog.oss-cn-beijing.aliyuncs.com/qq.png"
+                  src="http://139.9.220.169:9090/upload/9BAA887621460382A43FFB5096CCDD00.jpg"
                 />
               </el-popover>
               <el-popover placement="top" :width="225" trigger="hover">
@@ -133,7 +133,7 @@
                 </template>
                 <img
                   style="width: 200px"
-                  src="https://tbt-blog.oss-cn-beijing.aliyuncs.com/wechat.png"
+                  src="http://139.9.220.169:9090/upload/CCEAF2C81E8DA0D31084D8C9BC8D06E9.jpg"
                 />
               </el-popover>
             </div>
@@ -171,10 +171,10 @@ export default {
         {
           src: img6,
 
-          content: `<p>学历：莆田学院22级软件工程学生</p>
+          content: `<p>软件工程</p>
             <p>未来职业：一名专注后端Java工程师</p>
             <p>沉淀：提高技术水平，好好学英语！</p>
-            <p>逐梦：争取在大二下学期暑假能找到一个实习！</p>`
+            <p>逐梦！</p>`
         },
 
         {

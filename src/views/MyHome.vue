@@ -4,10 +4,10 @@
       <div id="main-top">
         <div class="main-top-mid">
           <div class="font-title-1">Hi!</div>
-          <div class="font-title-2">I'm Tan.</div>
+          <div class="font-title-2">I'm rhWu.</div>
           <div class="font-title-3">A Java Developer</div>
           <div class="main-top">
-            <div class="tit"><span>今非昔比</span></div>
+            <div class="tit"><span @click="navigateToEditor" >今非昔比</span></div>
           </div>
         </div>
       </div>
@@ -46,22 +46,20 @@
   <BlogFooter></BlogFooter>
 </template>
 
-<script>
-import BlogFooter from '@/components/BlogFooter.vue'
-export default {
-  name: 'word-cloud',
+<script setup>
+import BlogFooter from '@/components/BlogFooter.vue';
+import { useRouter } from 'vue-router';
 
- 
-  methods: {
-    startRead() {
-      //  平滑移动
-      document.getElementById('blog-top').scrollIntoView({ behavior: 'smooth' })
-    }
-  },
-  components: {
-    BlogFooter
-  }
-}
+const router = useRouter();
+
+const startRead = () => {
+  document.getElementById('blog-top').scrollIntoView({ behavior: 'smooth' });
+};
+
+const navigateToEditor = () => {
+  router.push('/editor');
+};
+
 </script>
 <style>
 img {
