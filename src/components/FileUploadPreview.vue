@@ -85,9 +85,9 @@ const handleSuccess = (response, file, fileList) => {
 };
 
 const beforeUpload = (file) => {
-  const isLt2M = file.size / 1024 / 1024 < 2;
+  const isLt2M = file.size / 1024 / 1024 < 5;
   if (!isLt2M) {
-    ElMessage.error('上传文件大小不能超过 2MB!');
+    ElMessage.error('上传文件大小不能超过 5MB!');
   }
   return isLt2M;
 };
