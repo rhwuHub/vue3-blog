@@ -61,6 +61,11 @@
           <el-button type="primary" @click="downloadFile(row.fileUrl,row.fileName)">下载</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="操作" width="120">
+        <template #default="{ row }">
+          <el-button style="background: #ff7f7f; border-color: #ff7f7f;" type="primary" @click="deleteFile(row.id)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <el-image-viewer v-if="showViewer"
@@ -113,6 +118,32 @@ const downloadFile = (url,fileName)=> {
         console.error('下载文件时出错：', error);
       });
 }
+
+const deleteFile = async (id) => {
+  try {
+    const config = {
+      params: {
+        id: id
+      }
+    };
+
+    // 发送 DELETE 请求
+    const response = await axios.delete("http://139.9.220.169:9090/api/file/deleteFile", config);
+
+    // 处理成功响应
+    if (response.status === 200) {
+      const res = await axios.get('http://139.9.220.169:9090/api/file/allFiles');
+      fileList.value = res.data;
+      ElMessage.success("删除成功！");
+    } else {
+      ElMessage.error("删除失败！");
+    }
+  } catch (error) {
+    // 处理错误响应
+    console.error('Error deleting file:', error);
+    ElMessage.error("删除失败！");
+  }
+};
 
 const addFile = async (name,url) => {
   const previewUrl = `http://139.9.220.169:9090/api/file/onlinePreview?url=${encodeURIComponent(url)}`;
