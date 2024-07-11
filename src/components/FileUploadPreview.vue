@@ -51,7 +51,7 @@
       <el-table-column label="二维码" width="120">
         <template #default="{ row }">
           <div v-if="row.fileQrcode">
-            <img  :src="row.fileQrcode" alt="二维码" style="max-width: 100px; max-height: 100px;" @click="previewQr(row.fileQrcode)"> \>
+            <img  :src="row.fileQrcode" alt="二维码" style="max-width: 100px; max-height: 100px;" @click="previewQr(row.fileQrcode)">
           </div>
           <span v-else>无</span>
         </template>
