@@ -51,7 +51,7 @@
       <el-table-column label="二维码" width="120">
         <template #default="{ row }">
           <div v-if="row.fileQrcode">
-            <img :src="row.fileQrcode" alt="二维码" style="max-width: 100px; max-height: 100px;">
+            <img  :src="row.fileQrcode" alt="二维码" style="max-width: 100px; max-height: 100px;" @click="previewQr(row.fileQrcode)"> \>
           </div>
           <span v-else>无</span>
         </template>
@@ -68,12 +68,7 @@
     :url-list ="imaList" close-on-press-escape
     >
     </el-image-viewer>
-
   </div>
-  <el-dialog :visible.sync="dialogVisible" width="70%" height="80%">
-    <span>需要注意的是内容是默认不居中的</span>
-    <iframe :src="dialogSrc" class="file-preview-iframe"></iframe>
-  </el-dialog>
 </template>
 
 <script setup>
@@ -83,25 +78,8 @@ import axios from 'axios'
 import QRCode from 'qrcode';
 const uploadList = ref([
 ]);
-const dialogVisible = ref(false);
-const dialogSrc = ref('');
-
 const showViewer = ref(false);
 const imaList = ref([]);
-
-const props = defineProps({
-  files: {
-    type: Array,
-    default: () => [],
-  },
-  data: {
-    type: Object,
-    default: () => ({}),
-  }
-});
-console.log( props.files);
-console.log(props.data)
-
 const fileList = ref([]);
 
 onMounted( async ()=>{
@@ -113,6 +91,11 @@ onMounted( async ()=>{
 })
 const handleViewerClose = () => {
   showViewer.value = false; // 关闭预览窗口
+}
+
+const previewQr = (base64)=>{
+  imaList.value.push(base64)
+  showViewer.value = true;
 }
 
 const downloadFile = (url,fileName)=> {
@@ -178,8 +161,6 @@ const handlePreview = (file) => {
   if (isImage) {
     console.log("picture")
     // 如果是图片，使用 Element-UI 组件进行预览
-    dialogSrc.value = fileUrl; // 设置预览图片的 URL
-    dialogVisible.value = true; // 显示预览对话框
     imaList.value.push(fileUrl)
     showViewer.value = true;
     ElMessage.success("预览图片成功！");
