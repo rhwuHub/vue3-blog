@@ -57,7 +57,7 @@ const startRead = () => {
 };
 
 const navigateToEditor = () => {
-  router.push('/editor');
+  router.push('/manage');
 };
 
 </script>
