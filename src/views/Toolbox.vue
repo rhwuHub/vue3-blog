@@ -14,6 +14,7 @@
             <p>我常站在天花板上思考人生。</p>
           </a>
         </div>
+
         <div class="tag" v-for="(list, index) in lists" :key="index">
           <div
               class="tag-a"
@@ -27,7 +28,8 @@
           </div>
         </div>
       </div>
-      <div class="main_right">
+
+      <div class="main_right" style="margin-left: 25px">
         <el-carousel
             ref="carousel"
             :trigger="click"
@@ -38,8 +40,8 @@
         >
           <el-carousel-item class="content" v-for="(show, index) in shows" :key="show.id">
             <!--文件上传与预览-->
-            <div v-if="index === 1" style="width: 1000px; height: 481px;margin-top: 80px;margin-bottom: 80px;">
-              <file-upload-preview :index="index" />
+            <div v-if="index === 1" style="width: 1000px; height: 481px;margin-top: 80px;margin-bottom: 80px; margin-left: 1px">
+              <file-upload-preview :files="fileList.value" :data="parentValue" />
             </div>
 
 
@@ -150,148 +152,110 @@
   </div>
 </template>
 
-<script>
-import axios from 'axios'
-import img1 from './img/about (1).jpg'
-import img2 from './img/about (2).jpg'
-import img3 from './img/about (3).jpg'
-import img4 from './img/about (4).jpg'
-import img5 from './img/about (5).jpg'
-import img6 from './img/about (6).jpg'
+<script setup>
+import axios from 'axios';
+import { ref, onMounted, onUnmounted,toRef } from 'vue';
+import img1 from './img/about (1).jpg';
+import img2 from './img/about (2).jpg';
+import img3 from './img/about (3).jpg';
+import img4 from './img/about (4).jpg';
+import img5 from './img/about (5).jpg';
+import img6 from './img/about (6).jpg';
 import FileUploadPreview from '@/components/FileUploadPreview.vue';
-import {Upload} from "@element-plus/icons-vue";
-export default {
-  components: {Upload,
-    FileUploadPreview},
-  data() {
-    return {
-      lists: [
-        { text: '文件上传与预览' },
-        { text: '技能' },
-        { text: '作品' },
-        { text: '友链' },
-        { text: '联系' },
-        { text: '更多' }
-      ],
-      shows: [
-        {
-          src: img5,
-          content: ``
-        },
-        {
-          src: img6,
 
-          content: `<p>软件工程</p>
-            <p>未来职业：一名专注后端Java工程师</p>
-            <p>沉淀：提高技术水平，好好学英语！</p>
-            <p>逐梦！</p>`
-        },
+const parentValue = ref("父组件给的值")
+const fileList = ref([]);
+const lists = ref([
+  { text: '文件上传与预览' },
+  { text: '技能' },
+  { text: '作品' },
+  { text: '友链' },
+  { text: '联系' },
+  { text: '更多' }
+]);
+const shows = ref([
+  { src: img5, content: `` },
+  { src: img6, content: `<p>软件工程</p><p>未来职业：一名专注后端Java工程师</p><p>沉淀：提高技术水平，好好学英语！</p><p>逐梦！</p>` },
+  { src: img1, content: `<p>java,ssm,springboot,redis,mysql,linux,前端 都会一点点.....</p>` },
+  { src: img2, content: `<p>她笑的很甜，像春日里的阳光</p>` },
+  { src: img3, content: `` },
+  { src: img4, content: `` },
+  { src: img5, content: `<p>敬请期待吧</p><p>你我顶峰相见！</p>` }
+]);
+const isClick = ref(-1);
+const friends = ref([]);
+const carousel = ref(null)
 
-        {
-          src: img1,
 
-          content: `<p>java,ssm,springboot,redis,mysql,linux,前端 都会一点点.....</p>`
-        },
-        {
-          src: img2,
+const djFriend = (url) => {
+  window.open(url);
+};
 
-          content: `  <p>她笑的很甜，像春日里的阳光</p>`
-        },
-        {
-          src: img3,
+const setActiveItem = (index) => {
+  isClick.value = index - 1;
+  carousel.value.setActiveItem(index);
+};
 
-          content: ``
-        },
-        {
-          src: img4,
+const debounce = (next, prev, delay) => {
+  let timer = null;
 
-          content: ``
-        },
-        {
-          src: img5,
+  return function (e) {
+    let direction = e.deltaY > 0 ? 'down' : 'up';
 
-          content: `
-
-            <p>敬请期待吧</p>
-            <p>你我顶峰相见！</p>`
-        }
-      ],
-      input: '',
-      initialIndex: 0,
-      isClick: -1,
-      friends: []
+    if (timer) {
+      clearTimeout(timer);
     }
-  },
-  methods: {
 
-
-    djFriend(url) {
-      window.open(url)
-    },
-    setActiveItem(index) {
-      this.isClick = index - 1
-      this.$refs.carousel.setActiveItem(index)
-    },
-    debounce(next, prev, delay) {
-      let timer = null //借助闭包
-      return function (e) {
-        let direction = e.deltaY > 0 ? 'down' : 'up'
-        // alert(direction)
-        if (timer) {
-          clearTimeout(timer)
-        }
-        if (direction == 'down' && e.deltaY >= 125) {
-          // alert(direction)
-          timer = setTimeout(next, delay)
-        }
-        if (direction == 'up' && e.deltaY <= -125) {
-          // alert(direction)
-          timer = setTimeout(prev, delay)
-        }
-      }
-    },
-    next() {
-      if (this.isClick == 5) {
-        this.isClick = -1
-      } else {
-        this.isClick = this.isClick + 1
-      }
-      this.setActiveItem(this.isClick + 1)
-      // this.$refs.carousel.next()
-    },
-    prev() {
-      if (this.isClick == -1) {
-        this.isClick = 5
-      } else {
-        this.isClick = this.isClick - 1
-      }
-      this.setActiveItem(this.isClick + 1)
-      // this.$refs.carousel.prev()
-    },
-
-    handleScroll(event) {
-      let direction = event.deltaY > 0 ? 'down' : 'up'
-      if (direction == 'down' && event.deltaY >= 125) {
-        this.$refs.carousel.next()
-      }
-      if (direction == 'up' && event.deltaY <= -125) {
-        this.$refs.carousel.prev()
-      }
+    if (direction == 'down' && e.deltaY >= 125) {
+      timer = setTimeout(next, delay);
     }
-  },
-  mounted() {
-    //监听鼠标滚动事件
-    window.addEventListener('mousewheel', this.debounce(this.next, this.prev, 300))
 
-    // 查询友链
-    axios.get(`http://139.9.220.169:9090/friend/getAll`).then((res) => {
-      this.friends = res.data.data
-    })
-  },
-  unmounted() {
-    window.removeEventListener('mousewheel', this.debounce(this.next, this.prev, 300), false)
+    if (direction == 'up' && e.deltaY <= -125) {
+      timer = setTimeout(prev, delay);
+    }
+  };
+};
+
+const next = () => {
+  if (isClick.value == 5) {
+    isClick.value = -1;
+  } else {
+    isClick.value = isClick.value + 1;
   }
-}
+
+  setActiveItem(isClick.value + 1);
+};
+
+const prev = () => {
+  if (isClick.value == -1) {
+    isClick.value = 5;
+  } else {
+    isClick.value = isClick.value - 1;
+  }
+
+  setActiveItem(isClick.value + 1);
+};
+
+
+// 生命周期钩子
+onMounted( async () => {
+ await axios.get('http://139.9.220.169:9090/api/file/allFiles')
+      .then((res) => {
+        fileList.value = res.data;
+        console.log(res.data)
+      });
+
+  window.addEventListener('mousewheel', debounce(next, prev, 300));
+
+  await axios.get('http://139.9.220.169:9090/friend/getAll')
+      .then((res) => {
+        friends.value = res.data.data;
+      });
+});
+
+onUnmounted(() => {
+  window.removeEventListener('mousewheel', debounce(next, prev, 300));
+});
 </script>
 
 <style scoped>

@@ -24,15 +24,15 @@
         </template>
       </el-table-column>
       <el-table-column
-          prop="name"
+          prop="fileName"
           label="文件名称"
       />
       <el-table-column
-          prop="uploadDate"
+          prop="creationTime"
           label="上传时间"
       >
         <template #default="{ row }">
-          {{ new Date(row.uploadDate).toLocaleString() }}
+          {{ new Date(row.creationTime).toLocaleString() }}
         </template>
       </el-table-column>
       <el-table-column
@@ -50,23 +50,34 @@
 
       <el-table-column label="二维码" width="120">
         <template #default="{ row }">
-          <div v-if="row.qrCodeDataUrl">
-            <img :src="row.qrCodeDataUrl" alt="二维码" style="max-width: 100px; max-height: 100px;">
+          <div v-if="row.fileQrcode">
+            <img :src="row.fileQrcode" alt="二维码" style="max-width: 100px; max-height: 100px;">
           </div>
           <span v-else>无</span>
         </template>
       </el-table-column>
+      <el-table-column label="操作" width="120">
+        <template #default="{ row }">
+          <el-button type="primary" @click="downloadFile(row.fileUrl,row.fileName)">下载</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
-    <el-dialog :visible.sync="dialogVisible">
-      <span>需要注意的是内容是默认不居中的</span>
-      <iframe :src="dialogSrc" class="file-preview-iframe"></iframe>
-    </el-dialog>
+    <el-image-viewer v-if="showViewer"
+                     @close="handleViewerClose"
+    :url-list ="imaList" close-on-press-escape
+    >
+    </el-image-viewer>
+
   </div>
+  <el-dialog :visible.sync="dialogVisible" width="70%" height="80%">
+    <span>需要注意的是内容是默认不居中的</span>
+    <iframe :src="dialogSrc" class="file-preview-iframe"></iframe>
+  </el-dialog>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import { ElMessage } from 'element-plus';
 import axios from 'axios'
 import QRCode from 'qrcode';
@@ -74,19 +85,78 @@ const uploadList = ref([
 ]);
 const dialogVisible = ref(false);
 const dialogSrc = ref('');
-const fileList = ref([
-]);
+
+const showViewer = ref(false);
+const imaList = ref([]);
+
+const props = defineProps({
+  files: {
+    type: Array,
+    default: () => [],
+  },
+  data: {
+    type: Object,
+    default: () => ({}),
+  }
+});
+console.log( props.files);
+console.log(props.data)
+
+const fileList = ref([]);
+
+onMounted( async ()=>{
+  await axios.get('http://139.9.220.169:9090/api/file/allFiles')
+      .then((res) => {
+        fileList.value = res.data;
+        console.log(res.data)
+      });
+})
+const handleViewerClose = () => {
+  showViewer.value = false; // 关闭预览窗口
+}
+
+const downloadFile = (url,fileName)=> {
+  axios.get(url, { responseType: 'blob' })
+      .then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      })
+      .catch(error => {
+        console.error('下载文件时出错：', error);
+      });
+}
+
 const addFile = async (name,url) => {
   const previewUrl = `http://139.9.220.169:9090/api/file/onlinePreview?url=${encodeURIComponent(url)}`;
   const qrCodeDataUrl = await QRCode.toDataURL(previewUrl);
   fileList.value.push({
     index: fileList.value.length,  // 自动生成序号
-    name: name,  // 自动生成文件名
-    uploadDate: new Date().toLocaleString(),
-    url: previewUrl,// 自动生成上传时间
-    qrCodeDataUrl: qrCodeDataUrl
+    fileName: name,
+    creationTime: new Date().toLocaleString(),
+    fileUrl: url,// 自动生成上传时间
+    fileQrcode: qrCodeDataUrl
   });
-  console.log(fileList.value);
+  const requestBody = {
+    fileName: name,
+    fileUrl: url,
+    fileQrcode: qrCodeDataUrl
+  };
+  const response = await axios.post('http://139.9.220.169:9090/api/file/saveFile', requestBody);
+  if (response.status == 200){
+    ElMessage.success("保存文件成功！");
+  }else {
+    ElMessage.error("保存文件失败！");
+  }
+  await axios.get('http://139.9.220.169:9090/api/file/allFiles')
+      .then((res) => {
+        fileList.value = res.data;
+        console.log(res.data)
+      });
 };
 const handleSuccess = (url, file) => {
   addFile(file.name, url);
@@ -101,19 +171,21 @@ const beforeUpload = (file) => {
 };
 
 const handlePreview = (file) => {
-
-  const fileUrl = file.url;
-
+  const fileUrl = file.fileUrl;
+  const previewUrl = `http://139.9.220.169:9090/api/file/onlinePreview?url=${encodeURIComponent(fileUrl)}`;
   // 判断文件 URL 是否以常见图片格式的后缀结尾
   const isImage = /\.(jpg|jpeg|png|gif|bmp)$/i.test(fileUrl);
-
   if (isImage) {
+    console.log("picture")
     // 如果是图片，使用 Element-UI 组件进行预览
     dialogSrc.value = fileUrl; // 设置预览图片的 URL
     dialogVisible.value = true; // 显示预览对话框
+    imaList.value.push(fileUrl)
+    showViewer.value = true;
+    ElMessage.success("预览图片成功！");
   } else {
     // 如果不是图片，使用新窗口打开在线预览链接
-    window.open(fileUrl, '_blank');
+    window.open(previewUrl, '_blank');
   }
 };
 
