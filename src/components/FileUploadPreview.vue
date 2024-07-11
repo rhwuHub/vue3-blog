@@ -63,7 +63,7 @@
       </el-table-column>
       <el-table-column label="操作" width="120">
         <template #default="{ row }">
-          <el-button style="background: #ff7f7f; border-color: #ff7f7f;" type="primary" @click="deleteFile(row.id)">删除</el-button>
+          <el-button style="background: #ff7f7f; border-color: #ff7f7f;" type="primary" @click="beforeDelete(row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -78,7 +78,7 @@
 
 <script setup>
 import {onMounted, ref} from 'vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from 'axios'
 import QRCode from 'qrcode';
 const uploadList = ref([
@@ -117,6 +117,23 @@ const downloadFile = (url,fileName)=> {
       .catch(error => {
         console.error('下载文件时出错：', error);
       });
+}
+
+const beforeDelete = (id)=> {
+  ElMessageBox.confirm('确定删除该文件吗？', '警告', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    // User clicked '确定'
+    deleteFile(id);
+  }).catch(() => {
+    // User clicked '取消'
+    ElMessage({
+      type: 'info',
+      message: '已取消删除'
+    });
+  });
 }
 
 const deleteFile = async (id) => {
