@@ -99,6 +99,7 @@ const handleViewerClose = () => {
 }
 
 const previewQr = (base64)=>{
+  imaList.value = [];
   imaList.value.push(base64)
   showViewer.value = true;
 }
@@ -209,6 +210,7 @@ const handlePreview = (file) => {
   if (isImage) {
     console.log("picture")
     // 如果是图片，使用 Element-UI 组件进行预览
+    imaList.value = [];
     imaList.value.push(fileUrl)
     showViewer.value = true;
     ElMessage.success("预览图片成功！");
