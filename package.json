@@ -25,6 +25,7 @@
     "mavon-editor": "^3.0.1",
     "oh-my-live2d": "^0.19.3",
     "pinia": "^2.1.7",
+    "qrcode": "^1.5.3",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },

@@ -1,10 +1,10 @@
 <template>
   <div class="file-upload-preview">
+<!--    :on-success="handleSuccess"-->
     <el-upload
         class="upload-container"
         :http-request="uploadRequest"
         :file-list="uploadList"
-        :on-success="handleSuccess"
         :before-upload="beforeUpload"
         :limit="5"
         multiple
@@ -47,6 +47,15 @@
           >预览</el-button>
         </template>
       </el-table-column>
+
+      <el-table-column label="二维码" width="120">
+        <template #default="{ row }">
+          <div v-if="row.qrCodeDataUrl">
+            <img :src="row.qrCodeDataUrl" alt="二维码" style="max-width: 100px; max-height: 100px;">
+          </div>
+          <span v-else>无</span>
+        </template>
+      </el-table-column>
     </el-table>
 
     <el-dialog :visible.sync="dialogVisible">
@@ -60,28 +69,27 @@
 import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import axios from 'axios'
+import QRCode from 'qrcode';
 const uploadList = ref([
 ]);
-
+const dialogVisible = ref(false);
+const dialogSrc = ref('');
 const fileList = ref([
 ]);
-const addFile = (name,url) => {
+const addFile = async (name,url) => {
+  const previewUrl = `http://139.9.220.169:9090/api/file/onlinePreview?url=${encodeURIComponent(url)}`;
+  const qrCodeDataUrl = await QRCode.toDataURL(previewUrl);
   fileList.value.push({
     index: fileList.value.length,  // 自动生成序号
     name: name,  // 自动生成文件名
     uploadDate: new Date().toLocaleString(),
-    url: url// 自动生成上传时间
+    url: previewUrl,// 自动生成上传时间
+    qrCodeDataUrl: qrCodeDataUrl
   });
   console.log(fileList.value);
 };
-
-const dialogVisible = ref(false);
-const dialogSrc = ref('');
-
-
-const handleSuccess = (response, file, fileList) => {
-  console.log(response.data)
-  addFile(file.name, response.data);
+const handleSuccess = (url, file) => {
+  addFile(file.name, url);
 };
 
 const beforeUpload = (file) => {
@@ -100,26 +108,24 @@ const handlePreview = (file) => {
   const isImage = /\.(jpg|jpeg|png|gif|bmp)$/i.test(fileUrl);
 
   if (isImage) {
-    console.log("picture")
     // 如果是图片，使用 Element-UI 组件进行预览
     dialogSrc.value = fileUrl; // 设置预览图片的 URL
     dialogVisible.value = true; // 显示预览对话框
   } else {
     // 如果不是图片，使用新窗口打开在线预览链接
-    const previewUrl = `http://139.9.220.169:9090/api/file/onlinePreview?url=${encodeURIComponent(fileUrl)}`;
-    window.open(previewUrl, '_blank');
+    window.open(fileUrl, '_blank');
   }
 };
 
 const uploadRequest = async ({ file }) => {
   const formData = new FormData();
   formData.append('file', file);
-
   try {
     const response = await axios.post('http://139.9.220.169:9090/file/addFile', formData, {
     });
     if (response.status == 200){
-      handleSuccess(response, file);
+      const data = response.data
+      handleSuccess(data, file);
     }
   } catch (error) {
     ElMessage.error('上传失败');
