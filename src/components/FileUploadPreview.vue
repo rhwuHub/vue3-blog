@@ -88,7 +88,7 @@ const imaList = ref([]);
 const fileList = ref([]);
 
 onMounted( async ()=>{
-  await axios.get('http://139.9.220.169:9090/api/file/allFiles')
+  await axios.get('http://rhwu.fun/hsbd/api/file/allFiles')
       .then((res) => {
         fileList.value = res.data;
         console.log(res.data)
@@ -146,11 +146,11 @@ const deleteFile = async (id) => {
     };
 
     // 发送 DELETE 请求
-    const response = await axios.delete("http://139.9.220.169:9090/api/file/deleteFile", config);
+    const response = await axios.delete("http://rhwu.fun/hsbd/api/file/deleteFile", config);
 
     // 处理成功响应
     if (response.status === 200) {
-      const res = await axios.get('http://139.9.220.169:9090/api/file/allFiles');
+      const res = await axios.get('http://rhwu.fun/hsbd/api/file/allFiles');
       fileList.value = res.data;
       ElMessage.success("删除成功！");
     } else {
@@ -164,7 +164,7 @@ const deleteFile = async (id) => {
 };
 
 const addFile = async (name,url) => {
-  const previewUrl = `http://139.9.220.169:9090/api/file/onlinePreview?url=${encodeURIComponent(url)}`;
+  const previewUrl = `http://rhwu.fun/hsbd/api/file/onlinePreview?url=${encodeURIComponent(url)}`;
   const qrCodeDataUrl = await QRCode.toDataURL(previewUrl);
   fileList.value.push({
     index: fileList.value.length,  // 自动生成序号
@@ -178,13 +178,13 @@ const addFile = async (name,url) => {
     fileUrl: url,
     fileQrcode: qrCodeDataUrl
   };
-  const response = await axios.post('http://139.9.220.169:9090/api/file/saveFile', requestBody);
+  const response = await axios.post('http://rhwu.fun/hsbd/api/file/saveFile', requestBody);
   if (response.status == 200){
     ElMessage.success("保存文件成功！");
   }else {
     ElMessage.error("保存文件失败！");
   }
-  await axios.get('http://139.9.220.169:9090/api/file/allFiles')
+  await axios.get('http://rhwu.fun/hsbd/api/file/allFiles')
       .then((res) => {
         fileList.value = res.data;
         console.log(res.data)
@@ -204,7 +204,7 @@ const beforeUpload = (file) => {
 
 const handlePreview = (file) => {
   const fileUrl = file.fileUrl;
-  const previewUrl = `http://139.9.220.169:9090/api/file/onlinePreview?url=${encodeURIComponent(fileUrl)}`;
+  const previewUrl = `http://rhwu.fun/hsbd/api/file/onlinePreview?url=${encodeURIComponent(fileUrl)}`;
   // 判断文件 URL 是否以常见图片格式的后缀结尾
   const isImage = /\.(jpg|jpeg|png|gif|bmp)$/i.test(fileUrl);
   if (isImage) {
@@ -224,7 +224,7 @@ const uploadRequest = async ({ file }) => {
   const formData = new FormData();
   formData.append('file', file);
   try {
-    const response = await axios.post('http://139.9.220.169:9090/file/addFile', formData, {
+    const response = await axios.post('http://rhwu.fun/hsbd/file/addFile', formData, {
     });
     if (response.status == 200){
       const data = response.data

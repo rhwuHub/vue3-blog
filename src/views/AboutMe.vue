@@ -104,7 +104,7 @@
                 </template>
                 <img
                   style="width: 200px"
-                  src="http://139.9.220.169:9090/upload/9BAA887621460382A43FFB5096CCDD00.jpg"
+                  src="http://rhwu.fun/hsbd/upload/9BAA887621460382A43FFB5096CCDD00.jpg"
                 />
               </el-popover>
               <el-popover placement="top" :width="225" trigger="hover">
@@ -133,7 +133,7 @@
                 </template>
                 <img
                   style="width: 200px"
-                  src="http://139.9.220.169:9090/upload/CCEAF2C81E8DA0D31084D8C9BC8D06E9.jpg"
+                  src="http://rhwu.fun/hsbd/upload/CCEAF2C81E8DA0D31084D8C9BC8D06E9.jpg"
                 />
               </el-popover>
             </div>
@@ -272,7 +272,7 @@ export default {
     window.addEventListener('mousewheel', this.debounce(this.next, this.prev, 300))
 
     // 查询友链
-    axios.get(`http://139.9.220.169:9090/friend/getAll`).then((res) => {
+    axios.get(`http://rhwu.fun/hsbd/friend/getAll`).then((res) => {
       this.friends = res.data.data
     })
   },

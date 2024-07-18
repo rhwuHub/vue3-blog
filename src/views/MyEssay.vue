@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     getAll() {
-      axios.get('http://139.9.220.169:9090/user/essay/get/all').then((res) => {
+      axios.get('http://rhwu.fun/hsbd/user/essay/get/all').then((res) => {
         this.essayList = res.data.data
         var pattern = /\:\:\([\u4e00-\u9fa5]+\)\:/g
         var pattern2 = /\:\:\([\u4e00-\u9fa5]+\)\:/

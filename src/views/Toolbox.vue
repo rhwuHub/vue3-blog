@@ -112,7 +112,7 @@
                 </template>
                 <img
                     style="width: 200px"
-                    src="http://139.9.220.169:9090/upload/9BAA887621460382A43FFB5096CCDD00.jpg"
+                    src="http://rhwu.fun/hsbd/upload/9BAA887621460382A43FFB5096CCDD00.jpg"
                 />
               </el-popover>
               <el-popover placement="top" :width="225" trigger="hover">
@@ -141,7 +141,7 @@
                 </template>
                 <img
                     style="width: 200px"
-                    src="http://139.9.220.169:9090/upload/CCEAF2C81E8DA0D31084D8C9BC8D06E9.jpg"
+                    src="http://rhwu.fun/hsbd/upload/CCEAF2C81E8DA0D31084D8C9BC8D06E9.jpg"
                 />
               </el-popover>
             </div>
@@ -239,7 +239,7 @@ const prev = () => {
 
 // 生命周期钩子
 onMounted( async () => {
- await axios.get('http://139.9.220.169:9090/api/file/allFiles')
+ await axios.get('http://rhwu.fun/hsbd/api/file/allFiles')
       .then((res) => {
         fileList.value = res.data;
         console.log(res.data)
@@ -247,7 +247,7 @@ onMounted( async () => {
 
   window.addEventListener('mousewheel', debounce(next, prev, 300));
 
-  await axios.get('http://139.9.220.169:9090/friend/getAll')
+  await axios.get('http://rhwu.fun/hsbd/friend/getAll')
       .then((res) => {
         friends.value = res.data.data;
       });

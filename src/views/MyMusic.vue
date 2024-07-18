@@ -379,7 +379,7 @@ export default {
     BlogFooter
   },
   mounted() {
-    const res = axios.get('http://139.9.220.169:9090/music/get').then((res) => {
+    const res = axios.get('http://rhwu.fun/hsbd/music/get').then((res) => {
       this.musicList = res.data.data
     })
 
