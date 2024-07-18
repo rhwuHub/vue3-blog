@@ -4,7 +4,7 @@
 
     <div class="info-main">
       <div class="info">Copyright © 2024 TBT</div>
-      <h4 class="info">湘ICP备2024063407号</h4>
+      <h4 class="info">皖ICP备2024055390号</h4>
     </div>
   </div>
 </template>
