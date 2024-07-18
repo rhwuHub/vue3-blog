@@ -99,7 +99,8 @@ const router = createRouter({
     {
       path: '/toolbox',
       name: 'Toolbox',
-      component: () => import('@/views/Toolbox.vue')
+      component: () => import('@/views/Toolbox.vue'),
+      meta:{requiresAuth:true}
     }
   ]
 })
