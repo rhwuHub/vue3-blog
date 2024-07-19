@@ -107,7 +107,7 @@ const router = useRouter()
 const coverImg = ref('')
 const fileUrl = ref('')
 const type = ref(0)
-const onSelectFile = (uploadFile) => {
+const onSelectFile = (uploadFile:any) => {
   coverImg.value = URL.createObjectURL(uploadFile.raw)
 }
 
@@ -120,6 +120,7 @@ const valueHtml = ref('<p>hello</p>')
 import 'highlight.js/styles/stackoverflow-light.css'
 import 'highlight.js/lib/common'
 import hljs from 'highlight.js'
+import type { TagOption,EditorConfig } from '@/types/types'
 // wangditor
 //定义指令，自动使用highlight.js渲染所有<pre><dode>代码块
 const vHigelight = {
@@ -131,23 +132,49 @@ const vHigelight = {
     })
   }
 }
-const editorConfig = {
-  MENU_CONF: {}
+const handleClose = (tag: any)=>{
+
 }
-editorConfig.MENU_CONF['codeSelectLang'] = {
-  // 代码语言
+
+const inputVisible = ref(false);
+
+const inputValue = ref('')
+
+const handleInputConfirm =()=>{
+
+}
+
+const showInput = ()=>{
+
+}
+
+const beforeAvatarUpload =()=>{
+
+}
+const changeData =()=>{
+
+}
+const editorConfig = ref<EditorConfig>(
+  {
+    MENU_CONF: {
+      codeSelectLang: {
+        codeLangs: [] // 初始值为空数组
+      }
+    }
+  }
+)
+
+editorConfig.value.MENU_CONF['codeSelectLang'] = {
   codeLangs: [
     { text: 'CSS', value: 'css' },
     { text: 'HTML', value: 'html' },
     { text: 'XML', value: 'xml' }
-    // 其他
   ]
 }
-editorConfig.MENU_CONF['uploadImage'] = {
-  async customUpload(file, insertFn) {
+editorConfig.value.MENU_CONF['uploadImage'] = {
+  async customUpload(file: any, insertFn: any) {
     const data = new FormData()
     data.append('file', file)
-
     axios.post('http://rhwu.fun/hsbd/file/addFile', data).then((res) => {
       const url = res.data
       const alt = '图片无法显示'
@@ -157,7 +184,7 @@ editorConfig.MENU_CONF['uploadImage'] = {
   }
 }
 // 自定义校验视频
-function customCheckVideoFn(src, poster) {
+function customCheckVideoFn(src: any, poster: any) {
   // JS 语法
   if (!src) {
     return
@@ -182,10 +209,7 @@ function customParseVideoSrc(src: string): string {
 
 editorConfig.MENU_CONF['insertVideo'] = {
   onInsertedVideo(videoNode: VideoElement | null) {
-    // TS 语法
-    // onInsertedVideo(videoNode) {                    // JS 语法
     if (videoNode == null) return
-
     const { src } = videoNode
     console.log('inserted video', src)
   },
@@ -193,13 +217,13 @@ editorConfig.MENU_CONF['insertVideo'] = {
   parseVideoSrc: customParseVideoSrc // 也支持 async 函数
 }
 editorConfig.MENU_CONF['uploadVideo'] = {
-  async customUpload(file, insertFn) {
+  async customUpload(file: any, insertFn: any) {
     const data = new FormData()
     data.append('file', file)
 
     axios.post('http://rhwu.fun/hsbd/file/addFile', data).then((res) => {
       const url = res.data
-      insertFn(url, poster)
+      insertFn(url)
     })
   }
 }
@@ -209,16 +233,16 @@ onBeforeUnmount(() => {
   editor.destroy()
 })
 
-const handleCreated = (editor) => {
+const handleCreated = (editor: any) => {
   editorRef.value = editor // 记录 editor 实例，重要！
 }
-function uploadSuccess(res) {
+function uploadSuccess(res: any) {
   // alert(res)
   fileUrl.value = res
 }
 
 // 分类
-var options = ref('')
+const options = ref<TagOption[]>([])
 // onMounted(() => {
 
 onMounted(() => {
@@ -278,7 +302,7 @@ function primary() {
     alert('请输入描述')
     return
   }
-  if (type.value == '') {
+  if (type.value == 0) {
     alert('请添加类型')
     return
   }
@@ -289,13 +313,13 @@ function primary() {
   if (router.currentRoute.value.query.id) {
     const id = router.currentRoute.value.query.id
     const data = new FormData()
-    data.append('id', id)
+    data.append('id', id.toString)
     data.append('title', title.value)
     data.append('description', description.value)
     data.append('content', valueHtml.value)
     data.append('coverImg', fileUrl.value)
-    data.append('type', type.value)
-    data.append('label', dynamicTags.value)
+    data.append('type', type.value.toString())
+    data.append('label', dynamicTags.value.toString())
     axios.post('http://rhwu.fun/hsbd/admin/article/update', data)
     router.push({ path: '/manage' })
   } else {
@@ -304,8 +328,8 @@ function primary() {
     data.append('description', description.value)
     data.append('content', valueHtml.value)
     data.append('coverImg', fileUrl.value)
-    data.append('label', dynamicTags.value)
-    data.append('type', type.value)
+    data.append('label', dynamicTags.value.toString())
+    data.append('type', type.value.toString())
     axios.post('http://rhwu.fun/hsbd/admin/article/upload', data)
     router.push({ path: '/manage' })
   }
@@ -313,11 +337,6 @@ function primary() {
 function cancel() {
   router.push({ path: '/manage' })
 }
-// function changeData(value, render) {
-//   // value中是文本值,render是渲染出的html文本
-//   // valueHtml.value = render;
-//   // console.log(render)
-// }
 </script>
 
 <style scoped>

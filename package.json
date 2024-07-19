@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@flyfish-group/file-viewer3": "^1.0.3",
     "@types/marked": "^6.0.0",
     "@vueup/vue-quill": "^1.2.0",
     "@wangeditor/editor": "^5.1.23",

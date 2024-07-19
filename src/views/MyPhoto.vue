@@ -1,6 +1,6 @@
 <template>
-  <waterfall></waterfall>
+  <Waterfall></Waterfall>
 </template>
-<script setup lang="ts">
-import waterfall from '@/components/waterfall.vue'
+<script setup>
+import Waterfall from '@/components/Waterfall.vue';
 </script>
