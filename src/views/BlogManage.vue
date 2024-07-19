@@ -214,29 +214,29 @@ function addType() {
     create()
   })
 }
-function onEditArticle(row) {
+function onEditArticle(row:any) {
   // alert(row.id)
   router.push({ path: '/editor', query: { id: row.id } })
   // $router.push(`/editor?id=${row.id}`)
 }
 
-function onDeleteArticle(row) {
+function onDeleteArticle(row: any) {
   const id = row.id
 
   axios.post(`http://rhwu.fun/hsbd/admin/article/delete/${id}`).then((res) => {
     create()
   })
 }
-function onDeleteType(row) {
+function onDeleteType(row: any) {
   const id = row.id
 
   axios.post(`http://rhwu.fun/hsbd/type/delete/${id}`).then((res) => {
     create()
   })
 }
-function onEditType(row) {
+function onEditType(row: any) {
   const id = row.id
-  ElMessageBox.prompt('Please input your type', 'Tip', {
+  ElMessageBox.prompt('Please input your types', 'Tip', {
     confirmButtonText: 'OK',
     cancelButtonText: 'Cancel'
   })
@@ -260,10 +260,10 @@ function onEditType(row) {
       })
     })
 }
-function onHideArticle(row) {}
-function onDeleteMessage(row) {}
+function onHideArticle(row: any) {}
+function onDeleteMessage(row: any) {}
 // 切换抽屉面板状态
-function drawerboxToggle(drawerboxNumber) {
+function drawerboxToggle(drawerboxNumber: any) {
   let prevDrawerboxNumber = chosenSlideNumber.value
   const drawerboxes = document.querySelectorAll('.drawerbox')
   drawerboxes[prevDrawerboxNumber - 1].classList.toggle('active') // 切换前一个抽屉面板的状态
@@ -274,7 +274,7 @@ const chosenSlideNumber = ref(1) // 当前选择的幻灯片编号
 const offset = ref(0) // 幻灯片偏移量
 const barOffset = ref(0) // 导航条偏移量
 // 切换到指定编号的幻灯片
-function slideTo(slideNumber) {
+function slideTo(slideNumber: any) {
   drawerboxToggle(slideNumber) // 切换抽屉面板状态
   drawerbtnToggle(slideNumber) // 切换抽屉按钮状态
   // 更新偏移量
@@ -285,22 +285,26 @@ function slideTo(slideNumber) {
   barSlide(barOffset.value) // 移动导航条
   // 获取所有幻灯片，为每个幻灯片设置偏移量
   const slides = document.querySelectorAll('.manage-card')
-  Array.from(slides).forEach((slide) => {
+  Array.from(slides).forEach((slide: any) => {
     slide.style.transform = `translateY(${offset.value}%)`
   })
 }
 
 // 切换抽屉按钮状态
-function drawerbtnToggle(drawerBtnNumber) {
+function drawerbtnToggle(drawerBtnNumber: any) {
   let prevDrawerBtnNumber = chosenSlideNumber.value
   const drawerBtns = document.querySelectorAll('.drawer-btn')
   drawerBtns[prevDrawerBtnNumber - 1].classList.toggle('active') // 切换前一个抽屉按钮的状态
   drawerBtns[drawerBtnNumber - 1].classList.toggle('active') // 切换当前抽屉按钮的状态
 }
 // 移动导航条
-function barSlide(barOffset) {
-  const bar = document.querySelector('#bar')
-  bar.style.transform = `translateY(${barOffset}%)`
+function barSlide(barOffset: any) {
+  const bar = document.querySelector('#bar') as HTMLElement | null;
+  if (bar) {
+    bar.style.transform = `translateY(${barOffset}%)`;
+  } else {
+    console.warn('Element with ID "bar" not found');
+  }
 }
 
 import type { UploadProps, UploadUserFile } from 'element-plus'

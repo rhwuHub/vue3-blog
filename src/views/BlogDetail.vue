@@ -391,6 +391,7 @@ import { useRouter } from 'vue-router'
 import { ref, nextTick } from 'vue'
 import { marked } from 'marked'
 import { ElMessage } from 'element-plus'
+import { Comment,Emoji } from '@/types/types';
 const vHigelight = {
   mounted(el: any) {
     let blocks = el.querySelectorAll('pre code')
@@ -412,11 +413,12 @@ const id = router.currentRoute.value.query.id
 var emojiShow = ref(false)
 var formShow = ref(-1)
 const commentList = ref()
-var twoList = ref([])
+// var twoList = ref([])
+let twoList = ref<Comment[][]>([]);
 const source = 1
 getComment()
 function getComment() {
-  twoList = ref([])
+  twoList = ref<Comment[][]>([]);
   // 获取到一级评论
   axios.get(`http://rhwu.fun/hsbd/user/comment/getOne/${source}/${id}`).then((res) => {
     commentList.value = res.data.data
@@ -427,12 +429,12 @@ function getComment() {
     for (var i = 0; i < commentList.value.length; i++) {
       var cont = commentList.value[i].content
       var content = cont.match(pattern)
-
+      let src: string = ''; // 定义 src 类型为 string
       if (content) {
         for (var k = 0; k < content.length; k++) {
           for (var j = 0; j < emoji.length; j++) {
             if ('::(' + emoji[j].title + '):' == content[k]) {
-              var src = ossKey + emoji[j].src
+              src = ossKey + emoji[j].src
               break
             }
           }
@@ -469,18 +471,18 @@ width: 2.5rem;" class="message-img" />`
         for (var v = 0; v < twoCommentList.length; v++) {
           var cont = twoCommentList[v].content
           var content = cont.match(pattern)
-
+          let src: string = ''; // 定义 src 类型为 string
           if (content) {
             for (var k = 0; k < content.length; k++) {
               for (var j = 0; j < emoji.length; j++) {
                 if ('::(' + emoji[j].title + '):' == content[k]) {
-                  var src = ossKey + emoji[j].src
+                  src = ossKey + emoji[j].src
                   break
                 }
               }
               var imgText =
                 `<img  src="` +
-                src +
+                (src) +
                 `" style="height: 2.5rem;
 width: 2.5rem;" class="message-img" />`
               cont = cont.replace(pattern2, imgText)
@@ -595,9 +597,8 @@ function showTwoComment(index: any) {
 function addEmoji(id: any) {
   myContent.value += '::(' + emoji[id].title + '):'
 }
-
 const ossKey = 'https://tbt-blog.oss-cn-beijing.aliyuncs.com/'
-const emoji = [
+const emoji: Emoji[] = [
   { src: 'emoji/zhenbang.png', title: '真棒' },
   { src: 'emoji/yiwen.png', title: '疑问' },
   { src: 'emoji/tushe.png', title: '吐舌' },

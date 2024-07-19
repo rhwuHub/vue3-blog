@@ -106,9 +106,9 @@ const router = createRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to:any, from:any, next:any) => {
   const mainStore = useMainStore()
-  if (to.matched.some(record => record.meta.requiresAuth)) {
+  if (to.matched.some((record:any) => record.meta.requiresAuth)) {
     if (!mainStore.passwordVerified) {
       next({
         path: '/password',
