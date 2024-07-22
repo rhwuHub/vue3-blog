@@ -12,6 +12,12 @@ const router = createRouter({
       component: MyHome
     },
     {
+      path: '/fileView',
+      name: 'FileView',
+      component: () => import('@/views/FileView.vue'),
+      props: route => ({ url: route.query.url })
+    },
+    {
       path: '/aboutMe',
       name: 'AboutMe',
       component: () => import('@/views/AboutMe.vue')

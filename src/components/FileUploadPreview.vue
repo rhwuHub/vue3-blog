@@ -47,6 +47,18 @@
           >预览</el-button>
         </template>
       </el-table-column>
+      <el-table-column
+        label="操作"
+        width="120"
+      >
+        <template #default="{ row }">
+          <el-button
+            size="small"
+            type="text"
+            @click="conver2Pdf(row)"
+          >2Pdf</el-button>
+        </template>
+      </el-table-column>
 
       <el-table-column label="二维码" width="120">
         <template #default="{ row }">
@@ -81,12 +93,13 @@ import {onMounted, ref} from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from 'axios'
 import QRCode from 'qrcode';
+import { useRouter } from 'vue-router'
 const uploadList = ref([
 ]);
 const showViewer = ref(false);
 const imaList = ref([]);
 const fileList = ref([]);
-
+const router = useRouter();
 onMounted( async ()=>{
   await axios.get('http://rhwu.fun/hsbd/api/file/allFiles')
       .then((res) => {
@@ -202,7 +215,7 @@ const beforeUpload = (file) => {
   return isLt2M;
 };
 
-const handlePreview = (file) => {
+const conver2Pdf = (file) => {
   const fileUrl = file.fileUrl;
   const previewUrl = `http://rhwu.fun/hsbd/api/file/onlinePreview?url=${encodeURIComponent(fileUrl)}`;
   // 判断文件 URL 是否以常见图片格式的后缀结尾
@@ -218,6 +231,12 @@ const handlePreview = (file) => {
     // 如果不是图片，使用新窗口打开在线预览链接
     window.open(previewUrl, '_blank');
   }
+};
+
+
+const handlePreview = (file) => {
+  const fileUrl = file.fileUrl;
+  router.push({ name: 'FileView', query: { url: fileUrl } });
 };
 
 const uploadRequest = async ({ file }) => {

@@ -8,11 +8,13 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 //引入这两个包
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
+import FileViewer from '@flyfish-group/file-viewer3'
 
 const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(ElementPlus)
+app.use(FileViewer)
 //把他加载到Vue中
 app.use(mavonEditor)
 app.mount('#app')
