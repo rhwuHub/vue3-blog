@@ -177,7 +177,7 @@ const deleteFile = async (id) => {
 };
 
 const addFile = async (name,url) => {
-  const previewUrl = `http://rhwu.fun/hsbd/api/file/onlinePreview?url=${encodeURIComponent(url)}`;
+  const previewUrl = `http://rhwu.fun/fileView?url=${encodeURIComponent(url)}`;
   const qrCodeDataUrl = await QRCode.toDataURL(previewUrl);
   fileList.value.push({
     index: fileList.value.length,  // 自动生成序号
