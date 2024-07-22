@@ -390,9 +390,6 @@ img {
   body {
     display: block;
     background: linear-gradient(to right bottom, rgb(1, 137, 248), rgb(239, 52, 211));
-    /* background: url('./img/home.png'); */
-    /* background: url('./img/sb2.jpg'); */
-    /* background: url('./img/home.png'); */
     background-size: 100% 100%;
     background-repeat: no-repeat;
     border-radius: 25px;

@@ -154,15 +154,23 @@ const beforeAvatarUpload =()=>{
 const changeData =()=>{
 
 }
+
+const mode = ref()
 const editorConfig = ref<EditorConfig>(
   {
     MENU_CONF: {
       codeSelectLang: {
         codeLangs: [] // 初始值为空数组
-      }
+      },
+      uploadImage:{},
+      uploadVideo: {},
+      insertVideo:{}
     }
   }
 )
+
+
+const toolbarConfig = ref()
 
 editorConfig.value.MENU_CONF['codeSelectLang'] = {
   codeLangs: [
@@ -207,8 +215,8 @@ function customParseVideoSrc(src: string): string {
   return src
 }
 
-editorConfig.MENU_CONF['insertVideo'] = {
-  onInsertedVideo(videoNode: VideoElement | null) {
+editorConfig.value.MENU_CONF['insertVideo'] = {
+  onInsertedVideo(videoNode: HTMLVideoElement | null) {
     if (videoNode == null) return
     const { src } = videoNode
     console.log('inserted video', src)
@@ -216,7 +224,8 @@ editorConfig.MENU_CONF['insertVideo'] = {
   checkVideo: customCheckVideoFn, // 也支持 async 函数
   parseVideoSrc: customParseVideoSrc // 也支持 async 函数
 }
-editorConfig.MENU_CONF['uploadVideo'] = {
+
+editorConfig.value.MENU_CONF['uploadVideo'] = {
   async customUpload(file: any, insertFn: any) {
     const data = new FormData()
     data.append('file', file)
@@ -311,9 +320,9 @@ function primary() {
     return
   }
   if (router.currentRoute.value.query.id) {
-    const id = router.currentRoute.value.query.id
+    const id = router.currentRoute.value.query.id.toString
     const data = new FormData()
-    data.append('id', id.toString)
+    data.append('id', id.toString())
     data.append('title', title.value)
     data.append('description', description.value)
     data.append('content', valueHtml.value)

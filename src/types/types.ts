@@ -1,3 +1,5 @@
+import { a } from 'vite/dist/node/types.d-aGj9QkWt'
+
 export  interface Comment {
   id: any
   img?: string;
@@ -29,7 +31,10 @@ interface CodeSelectLang {
 }
 
 interface MenuConf {
-  codeSelectLang: CodeSelectLang;
+  codeSelectLang: CodeSelectLang,
+  uploadImage: any,
+  uploadVideo: any,
+  insertVideo: any
 }
 
 export interface EditorConfig {
