@@ -1,6 +1,6 @@
 <template>
   <div class='simple-view'>
-    <file-viewer :url="url" />
+    <file-viewer :url="url"/>
   </div>
 </template>
 <script setup>
@@ -15,6 +15,5 @@ onMounted(() => {
 </script>
 <style scoped>
 .simple-view {
-  height: 100vh;
 }
 </style>

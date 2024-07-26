@@ -89,11 +89,13 @@
 </template>
 
 <script setup>
+import { encode as base64Encode, decode as base64Decode } from 'base-64';
 import {onMounted, ref} from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from 'axios'
 import QRCode from 'qrcode';
 import { useRouter } from 'vue-router'
+import { Base64 } from 'js-base64'
 const uploadList = ref([
 ]);
 const showViewer = ref(false);
@@ -177,7 +179,8 @@ const deleteFile = async (id) => {
 };
 
 const addFile = async (name,url) => {
-  const previewUrl = `http://rhwu.fun/fileView?url=${encodeURIComponent(url)}`;
+  const base64EncodeUrl = Base64.encode(url)
+  const previewUrl ='http://rhwu.fun/onlinePreview?url='+encodeURIComponent(base64EncodeUrl)
   const qrCodeDataUrl = await QRCode.toDataURL(previewUrl);
   fileList.value.push({
     index: fileList.value.length,  // 自动生成序号
@@ -217,7 +220,7 @@ const beforeUpload = (file) => {
 
 const conver2Pdf = (file) => {
   const fileUrl = file.fileUrl;
-  const previewUrl = `http://rhwu.fun/hsbd/api/file/onlinePreview?url=${encodeURIComponent(fileUrl)}`;
+  const previewUrl = `http://139.9.220.169:8100/onlinePreview?url=${encodeURIComponent(fileUrl)}`;
   // 判断文件 URL 是否以常见图片格式的后缀结尾
   const isImage = /\.(jpg|jpeg|png|gif|bmp)$/i.test(fileUrl);
   if (isImage) {
@@ -236,7 +239,9 @@ const conver2Pdf = (file) => {
 
 const handlePreview = (file) => {
   const fileUrl = file.fileUrl;
-  router.push({ name: 'FileView', query: { url: fileUrl } });
+  const base64EncodeUrl = Base64.encode(fileUrl)
+  window.open('http://rhwu.fun/onlinePreview?url='+encodeURIComponent(base64EncodeUrl));
+  // router.push({ name: 'FileView', query: { url: fileUrl } });
 };
 
 const uploadRequest = async ({ file }) => {
