@@ -47,18 +47,18 @@
           >预览</el-button>
         </template>
       </el-table-column>
-      <el-table-column
-        label="操作"
-        width="120"
-      >
-        <template #default="{ row }">
-          <el-button
-            size="small"
-            type="text"
-            @click="conver2Pdf(row)"
-          >2Pdf</el-button>
-        </template>
-      </el-table-column>
+<!--      <el-table-column-->
+<!--        label="操作"-->
+<!--        width="120"-->
+<!--      >-->
+<!--        <template #default="{ row }">-->
+<!--          <el-button-->
+<!--            size="small"-->
+<!--            type="text"-->
+<!--            @click="conver2Pdf(row)"-->
+<!--          >2Pdf</el-button>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
 
       <el-table-column label="二维码" width="120">
         <template #default="{ row }">
@@ -180,7 +180,7 @@ const deleteFile = async (id) => {
 
 const addFile = async (name,url) => {
   const base64EncodeUrl = Base64.encode(url)
-  const previewUrl ='http://rhwu.fun/onlinePreview?url='+encodeURIComponent(base64EncodeUrl)
+  const previewUrl ='http://rhwu.fun/preview/onlinePreview?url='+encodeURIComponent(base64EncodeUrl)
   const qrCodeDataUrl = await QRCode.toDataURL(previewUrl);
   fileList.value.push({
     index: fileList.value.length,  // 自动生成序号
@@ -240,7 +240,7 @@ const conver2Pdf = (file) => {
 const handlePreview = (file) => {
   const fileUrl = file.fileUrl;
   const base64EncodeUrl = Base64.encode(fileUrl)
-  window.open('http://rhwu.fun/onlinePreview?url='+encodeURIComponent(base64EncodeUrl));
+  window.open('http://rhwu.fun/preview/onlinePreview?url='+encodeURIComponent(base64EncodeUrl));
   // router.push({ name: 'FileView', query: { url: fileUrl } });
 };
 
