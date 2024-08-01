@@ -13,7 +13,7 @@
       <el-button size="medium" type="primary">点击上传</el-button>
     </el-upload>
 
-    <el-table :data="fileList" class="file-list-table" border  style="width: 100%">
+    <el-table :data="fileList" class="file-list-table" border fit  style="width: 100%">
       <el-table-column
           prop="index"
           label="序号"
